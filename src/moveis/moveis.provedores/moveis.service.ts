@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Movel } from '../entidades/movel.entidade';
 import { CriarRegistroDto } from '../dto/criarRegistro.dto';
+import { EditarRegistroDto } from '../dto/editarRegistro.dto';
 
 @Injectable()
 export class MoveisProvedores
@@ -15,16 +16,16 @@ export class MoveisProvedores
 		return this.movelRepo.find();
 	}
 
-  criarRegistro( registro: CriarRegistroDto ): boolean
+  criarRegistro( registro: CriarRegistroDto ): Movel
   {
-    try
-    {
-      this.movelRepo.create(registro);
-      return true;
-    }
-    catch( err )
-    {
-      return false;
-    }
+		return this.movelRepo.create(registro);
   }
+
+	/** Edita parcialmente pelo id
+	 *  @param {EditarRegistroDto} registroParcial - objeto com campos editatum.
+	* */
+	editarRegistroDinamicamente( registroParcial: EditarRegistroDto )
+	{
+		return this.movelRepo.update('id', registroParcial );
+	}
 }

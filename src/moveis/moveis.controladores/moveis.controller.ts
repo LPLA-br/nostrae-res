@@ -4,6 +4,8 @@ import { Body } from '@nestjs/common';
 import { MoveisProvedores } from '../moveis.provedores/moveis.service';
 import { Validacao } from '../moveis.pipes/validacao.pipe';
 import { CriarRegistroDto } from '../dto/criarRegistro.dto';
+import { Movel } from '../entidades/movel.entidade';
+import { EditarRegistroDto } from '../dto/editarRegistro.dto';
 
 @Controller('moveis')
 export class MoveisControladoresController
@@ -17,29 +19,20 @@ export class MoveisControladoresController
     return this.moveisProvedores.buscarTodos();
 	}
 
-  /** Retorna estado da operação realizada e uma
-   *  breve mensagem.
-   *  @returns {{status:string,msg:string}}
+	/** Retorna representação da entidade armazenada no servidor.
+   *  @returns {Movel}
   * */
 	@Post()
 	criarRegistro( @Body(new Validacao()) criarRegistroDto: CriarRegistroDto  )
-  : {status:string;msg:string}
+  : Movel
 	{
-    if ( this.moveisProvedores.criarRegistro(criarRegistroDto) )
-      return {status:'200',msg:'registro criado'};
-    else
-      return {status:'500',msg:'erro interno'};
-	}
-
-	@Put()
-	atualizarRegistroCompletamente(): void
-	{
-
+		return this.moveisProvedores.criarRegistro( criarRegistroDto  );
 	}
 
 	@Patch()
-	baixaRegistro(): void
+	atualizarRegistroParcialmente( @Body(new Validacao()) editarRegistroDto : EditarRegistroDto )
 	{
-
+		return this.moveisProvedores.editarRegistroDinamicamente( editarRegistroDto );
 	}
+
 }
