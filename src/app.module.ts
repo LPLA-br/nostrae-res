@@ -1,7 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';;
 import { MoveisModule } from './moveis/moveis.module';
+import { UsuarioModule } from './usuario/usuario.module';
 import { Movel } from './moveis/entidades/movel.entidade';
+import { Usuario } from './usuario/entities/usuario.entidade';
 require('dotenv/config');
 
 @Module(
@@ -17,12 +19,14 @@ require('dotenv/config');
           password: process.env.POSTGRES_PASSWORD,
           database: process.env.POSTGRES_DATABASE,
           entities: [
-            Movel
+            Movel,
+            Usuario
           ],
           /*não utilizar em produção abaixo*/
           synchronize: true,
         }
       ),
+      UsuarioModule,
 		],
 		controllers: [],
 		providers: [],
