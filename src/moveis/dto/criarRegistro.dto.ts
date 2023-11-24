@@ -14,6 +14,10 @@ export class CriarRegistroDto
   @IsString({message:'marca não string'})
   marca: string;
 
+	@IsEmpty({message:'campo categoria vazio'})
+	@IsString({message:'categoria não string'})
+	categoria: string;
+
   @IsEmpty({message:'campo descricao vazio'})
   @IsNumber({},{message:'anoAquisicao não número'})
   anoAquisicao: number;

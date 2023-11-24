@@ -9,6 +9,7 @@ import { Response } from 'express';
 
 import { CreateUserDto } from '../dto/criarUsuario.dto';
 import { Autenticar } from '../dto/autenticar.dto';
+import { Sal } from '../dto/sal.dto';
 import { Usuario } from '../entities/usuario.entidade';
 
 @Controller('usuario')
@@ -33,14 +34,17 @@ export class UsuarioController
   }
 
   /** retorna sal para usuário indicado no cliente
-  *   @param {} ? - ?
+  *   @param {Sal} username - obter sal através do username.
   * */
   @Post()
-  async salUsuario(): Promise<void>
-  {}
+  async salUsuario(
+		@Body(new ValidationPipe()) username: Sal
+	): Promise<any>
+  {
+		return this.servicoUsuario.obterSal( username );
+	}
 
   /** Cliente gera hash e o envia para o servidor.
-   *  Método manual
    *  @param {Autenticar} auth - validacao para hash enviado pelo cliente.
   * */
   @Post()
@@ -49,6 +53,6 @@ export class UsuarioController
     @Res() resp: Response
   ): Promise<void>
   {
-    
+		const verif = this.servicoUsuario.autenticar( auth );
   }
 }

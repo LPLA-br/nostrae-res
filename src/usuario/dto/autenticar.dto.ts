@@ -1,4 +1,3 @@
-import { IsString } from "class-validator";
 import { PickType } from "@nestjs/swagger";
 
 import { CreateUserDto } from './criarUsuario.dto';

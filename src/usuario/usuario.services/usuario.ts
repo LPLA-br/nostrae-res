@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { Usuario } from '../entities/usuario.entidade';
 import { CreateUserDto } from '../dto/criarUsuario.dto';
 import { Autenticar } from '../dto/autenticar.dto';
+import { Sal } from '../dto/sal.dto';
 
 @Injectable()
 export class UsuarioService
@@ -35,6 +36,11 @@ export class UsuarioService
 
     return this.usuariosRepositorio.save( novoUsuario );
   }
+
+	async obterSal( username: Sal ): Promise<Usuario>
+	{
+		return this.usuariosRepositorio.findOne({where:{username: username.username}});
+	}
 
   /** Compara hash gerado pelo usuário com o hash
    *  da senha armazendada.

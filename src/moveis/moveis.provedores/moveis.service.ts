@@ -11,17 +11,28 @@ export class MoveisProvedores
 	constructor( @InjectRepository(Movel) private movelRepo: Repository<Movel>  )
 	{}
 
+	/* Retorna matriz com todos os registros.
+	* **/
 	buscarTodos(): Promise<Movel []>
 	{
 		return this.movelRepo.find();
 	}
 
-  criarRegistro( registro: CriarRegistroDto ): Movel
+  criarRegistro( registro: CriarRegistroDto ): Promise<Movel>
   {
-		return this.movelRepo.create(registro);
-  }
+		const reg = this.movelRepo.create({
+			descricao:	 registro.descricao,
+			marca:			 registro.marca,
+			categoria:	 registro.categoria,
+			anoAquisicao:registro.anoAquisicao,
+			localizacao: registro.localizacao,
+			utilizavel:	 registro.utilizavel
+		});
 
-	/** Edita parcialmente pelo id
+		return this.movelRepo.save( reg );
+	}
+
+	/** Utiliza dto parcial para atualização parcial do registro (datamask).
 	 *  @param {EditarRegistroDto} registroParcial - objeto com campos editatum.
 	* */
 	editarRegistroDinamicamente( registroParcial: EditarRegistroDto )

@@ -14,23 +14,20 @@ export class MoveisControladoresController
   {}
 
 	@Get()
-	listarTodosRegistros()
+	async listarTodosRegistros()
 	{
     return this.moveisProvedores.buscarTodos();
 	}
 
-	/** Retorna representação da entidade armazenada no servidor.
-   *  @returns {Movel}
-  * */
 	@Post()
-	criarRegistro( @Body(new Validacao()) criarRegistroDto: CriarRegistroDto  )
-  : Movel
+	async criarRegistro( @Body(new Validacao()) criarRegistroDto: CriarRegistroDto  )
+  : Promise<Movel[]|Movel>
 	{
 		return this.moveisProvedores.criarRegistro( criarRegistroDto  );
 	}
 
 	@Patch()
-	atualizarRegistroParcialmente( @Body(new Validacao()) editarRegistroDto : EditarRegistroDto )
+	async atualizarRegistroParcialmente( @Body(new Validacao()) editarRegistroDto : EditarRegistroDto )
 	{
 		return this.moveisProvedores.editarRegistroDinamicamente( editarRegistroDto );
 	}
