@@ -1,0 +1,21 @@
+# Para container do banco de dados.
+version: "1.0"
+
+services:
+
+  postgres:
+    image: postgres:latest
+    container_name: nostraeres_pg
+    volumes:
+      - nostraeres:/var/lib/postgresql/data
+    ports:
+      - "5432:5432/tcp"
+    environment:
+      POSTGRES_USER: 'nostraeres'
+      POSTGRES_PASSWORD: 'rinoceteio'
+      POSTGRES_DB: 'nostraeres_data'
+      PGDATA: '/var/lib/postgresql/data/pgdata'
+
+volumes:
+  nostraeres:
+    name: nostraeres

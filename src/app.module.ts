@@ -4,6 +4,7 @@ import { MoveisModule } from './moveis/moveis.module';
 import { UsuarioModule } from './usuario/usuario.module';
 import { Movel } from './moveis/entidades/movel.entidade';
 import { Usuario } from './usuario/entities/usuario.entidade';
+import { AuthModule } from './auth/auth.module';
 require('dotenv/config');
 
 @Module(
@@ -27,6 +28,7 @@ require('dotenv/config');
         }
       ),
       UsuarioModule,
+      AuthModule,
 		],
 		controllers: [],
 		providers: [],

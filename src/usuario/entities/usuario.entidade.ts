@@ -15,7 +15,7 @@ export class Usuario
   @Column()
   sal: string;
 
-  @Column()
+  @Column({nullable: true})
   token: string;
 
 }
