@@ -22,22 +22,29 @@ export class UsuarioService
   * */
   async salvarUsuarioUnico( usuario: CreateUserDto ): Promise<Usuario|string>
   {
-    const verif = this.usuariosRepositorio.find();
-
-    if( (await verif).length > 0 )
+    try
     {
-      return '{"msg":"usuario unico existe"}';
+      const verif = this.usuariosRepositorio.find();
+
+      if( (await verif).length > 0 )
+      {
+        return '{"msg":"usuario unico existe"}';
+      }
+
+      const novoUsuario = this.usuariosRepositorio.create(
+      {
+        id:         this.id,
+        username:   usuario.username,
+        hashsenha:  usuario.hashsenha,
+        sal:        usuario.sal
+      });
+
+      return this.usuariosRepositorio.save( novoUsuario );
     }
-
-    const novoUsuario = this.usuariosRepositorio.create(
+    catch( err )
     {
-      id:         this.id,
-      username:   usuario.username,
-      hashsenha:  usuario.hashsenha,
-      sal:        usuario.sal
-    });
-
-    return this.usuariosRepositorio.save( novoUsuario );
+      throw err;
+    }
   }
 
   /** Retorna nome do usuário ou string vazia.
@@ -45,19 +52,33 @@ export class UsuarioService
   * */
   async getUsername(): Promise<string>
   {
-    return (await this.usuariosRepositorio.findOne({where:{id:this.id}})).username.toString();
+    try
+    {
+      return (await this.usuariosRepositorio.findOne({where:{id:this.id}})).username.toString();
+    }
+    catch( err )
+    {
+      throw err;
+    }
   }
 
-  /** @returns retorna true ou false.
+  /** Retorna a existência ou não do usuário único.
+   *  @returns retorna true ou false.
   * */
   async usuarioExiste(): Promise<boolean>
   {
-    const usuario = this.usuariosRepositorio.findOne({});
-    if ( (await this.usuariosRepositorio.findOne({where:{id:this.id}})).id == this.id )
+    try
     {
-      return true;
+      if ( (await this.usuariosRepositorio.findOne({where:{id:this.id}})).id == this.id )
+      {
+        return true;
+      }
+      return false;
     }
-    return false;
+    catch( err )
+    {
+      throw err;
+    }
   }
 
   /** Retorna hash do usuário armazenado.
@@ -65,36 +86,67 @@ export class UsuarioService
   * */
   async obterHash(): Promise<string>
   {
-    return (await this.usuariosRepositorio.findOne({where:{id:this.id}})).hashsenha.toString();
+    try
+    {
+      return (await this.usuariosRepositorio.findOne({where:{id:this.id}})).hashsenha.toString();
+    }
+    catch(err)
+    {
+      throw err;
+    }
   }
 
+  /** Fornece o sal para que usuário gere seu hash.
+   * @returns {string} sal do usuário único.
+   * */
   async obterSal(): Promise<string>
   {
-    return (await this.usuariosRepositorio.findOne({where:{id:this.id}})).hashsenha.toString();
+    try
+    {
+      return (await this.usuariosRepositorio.findOne({where:{id:this.id}})).sal.toString();
+    }
+    catch( err )
+    {
+      throw err;
+    }
+  }
+
+  async obterToken(): Promise<string>
+  {
+    try
+    {
+      const usuario = await this.usuariosRepositorio.findOne({where:{id:this.id}});
+      return usuario.token;
+    }
+    catch(err)
+    {
+      throw new InternalServerErrorException({},err);
+    }
   }
 
   async salvarToken( token: string ): Promise<boolean>
   {
     try
     {
-      this.usuariosRepositorio.update({id:this.id},{token:token});
+      await this.usuariosRepositorio.update({id:this.id},{token:token});
       return true;
     }
-    catch( reason )
+    catch( err )
     {
-      return reason;
+      throw err;
     }
   }
 
-  async deletarToken(): Promise<void>
+  async deletarToken(): Promise<boolean>
   {
     try
     {
-      this.usuariosRepositorio.update({id:this.id},{token:null});
+      await this.usuariosRepositorio.update({id:this.id},{token:null});
+      return true;
     }
-    catch( reason )
+    catch( err )
     {
-      console.log( reason );
+      throw err;
     }
   }
 

@@ -13,7 +13,8 @@ export class AuthServiceUsuario
   )
   {}
 
-  /** Gera id decimal pseudo aleatório de 32 caracteres.*/
+  /** Gera id decimal pseudo aleatório de 32 caracteres.
+  *   @returns {string} id decimal de 32 caracteres.*/
   private gerarIdDecimal(): string
   {
     let min = 0;
@@ -27,7 +28,8 @@ export class AuthServiceUsuario
     return id;
   }
 
-  /** Gera token decimal com duração de 6 horas */
+  /** Gera token decimal com duração de 6 horas
+  *   @returns {{acess_token:string}} objeto com string token*/
   private async gerarJWT(): Promise<{acess_token:string}>
   {
     let payload: string;
@@ -44,9 +46,9 @@ export class AuthServiceUsuario
 
   /** Acesso ao sistema monousuário.
    *  @param {string} hashsenha - hash da senha gerado no cliente para comparação.
-   *  @returns {object} token para o cliente assinar suas ações nas rotas de funcionalidade. 
+   *  @returns {{acess_token:string}} token para o cliente assinar suas ações nas rotas de funcionalidade. 
   * */
-  async validarParaSessao( hashsenha: string ): Promise<object>
+  async validarParaSessao( hashsenha: string ): Promise<{acess_token:string}>
   {
     if ( this.servicoUsuarios.usuarioExiste() )
     {
@@ -54,14 +56,46 @@ export class AuthServiceUsuario
 
       if ( hash === hashsenha )
       {
-        const token = await this.gerarJWT();
-        this.servicoUsuarios.salvarToken( token.acess_token );
-        return this.gerarJWT();
+        try
+        {
+          const token = await this.gerarJWT();
+          await this.servicoUsuarios.salvarToken( token.acess_token );
+          return token;
+        }
+        catch( err )
+        {
+          return {
+            acess_token: "500"
+          };
+        }
       }
       else
       {
-        throw new UnauthorizedException({},'não autorizado para sessao');
+        return {
+          acess_token: "401"
+        };
       }
+    }
+  }
+
+  /** Recebe token do cliente e retorna permissão para ação.
+   *  @param {string} token do usuário único.
+   *  @returns {boolean} permissão
+  * */
+  async autorizacao( token:string ): Promise<boolean>
+  {
+    try
+    {
+      const userToken = await this.servicoUsuarios.obterToken();
+      if ( userToken == token )
+      {
+        return true;
+      }
+      return false;
+    }
+    catch( err )
+    {
+      throw new UnauthorizedException({}, err);
     }
   }
 

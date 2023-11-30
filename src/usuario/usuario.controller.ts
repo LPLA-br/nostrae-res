@@ -1,5 +1,6 @@
 import { Controller } from '@nestjs/common';
-import { Post, Get, HttpCode } from '@nestjs/common';
+import { Post, Get, HttpCode, Header } from '@nestjs/common';
+import { InternalServerErrorException } from '@nestjs/common';
 import { Body } from '@nestjs/common';
 import { ValidationPipe } from '@nestjs/common';
 import { UsuarioService } from './usuario.service';
@@ -26,7 +27,27 @@ export class UsuarioController
     @Body(new ValidationPipe()) createUserDto: CreateUserDto
   ): Promise<Usuario|string>
   {
-    return this.servicoUsuario.salvarUsuarioUnico( createUserDto );
+    try
+    {
+      return await this.servicoUsuario.salvarUsuarioUnico( createUserDto );
+    }
+    catch( err )
+    {
+      throw new InternalServerErrorException({},err);
+    }
+  }
+
+  @Get()
+  async enviarSal(): Promise<string>
+  {
+    try
+    {
+      return await this.servicoUsuario.obterSal();
+    }
+    catch( err )
+    {
+      throw err;
+    }
   }
 
 }
