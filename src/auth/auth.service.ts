@@ -50,32 +50,37 @@ export class AuthServiceUsuario
   * */
   async validarParaSessao( hashsenha: string ): Promise<{acess_token:string}>
   {
-    if ( this.servicoUsuarios.usuarioExiste() )
-    {
-      const hash = await this.servicoUsuarios.obterHash();
+		try
+		{
+			if ( await this.servicoUsuarios.usuarioExiste() )
+			{
+				const hash = await this.servicoUsuarios.obterHash();
 
-      if ( hash === hashsenha )
-      {
-        try
-        {
-          const token = await this.gerarJWT();
-          await this.servicoUsuarios.salvarToken( token.acess_token );
-          return token;
-        }
-        catch( err )
-        {
-          return {
-            acess_token: "500"
-          };
-        }
-      }
-      else
-      {
-        return {
-          acess_token: "401"
-        };
-      }
-    }
+				if ( hash === hashsenha )
+				{
+					const token = await this.gerarJWT();
+					await this.servicoUsuarios.salvarToken( token.acess_token );
+					return token;
+				}
+				else
+				{
+					throw new UnauthorizedException(
+					{
+						statusCode: "401",
+						msg:"não autorizado credencial de senha inválida"
+					});
+				}
+			}
+		}
+		catch( err )
+		{
+			throw new InternalServerErrorException(
+			{
+				statusCode: "500",
+				msg:"validarParaSessao() falhou",
+				det:err
+			});
+		}
   }
 
   /** Recebe token do cliente e retorna permissão para ação.
@@ -95,7 +100,12 @@ export class AuthServiceUsuario
     }
     catch( err )
     {
-      throw new UnauthorizedException({}, err);
+      throw new UnauthorizedException(
+			{
+				statusCode: "500",
+				msg: "autorizacao() falhou",
+				det: err
+			});
     }
   }
 
@@ -103,13 +113,17 @@ export class AuthServiceUsuario
   {
     try
     {
-      this.servicoUsuarios.deletarToken();
-      return '{"status":200}';
+      await this.servicoUsuarios.deletarToken();
+      return '{"statusCode":200}';
     }
     catch(err)
     {
-      console.log(err);
-      throw new InternalServerErrorException({},`token não removido ${err}`);
+      throw new InternalServerErrorException(
+			{
+				statusCode: "500",
+				msg: "encerrarSessao() token não removido",
+				det: err
+			});
     }
   }
 

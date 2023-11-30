@@ -27,27 +27,37 @@ export class UsuarioController
     @Body(new ValidationPipe()) createUserDto: CreateUserDto
   ): Promise<Usuario|string>
   {
-    try
-    {
-      return await this.servicoUsuario.salvarUsuarioUnico( createUserDto );
-    }
-    catch( err )
-    {
-      throw new InternalServerErrorException({},err);
-    }
+		try
+		{
+			return await this.servicoUsuario.salvarUsuarioUnico( createUserDto );
+		}
+		catch(err)
+		{
+			throw new InternalServerErrorException(
+			{
+				statusCode:"500",
+				msg:"/usuario POST falhou",
+				det:err
+			});
+		}
   }
 
   @Get()
   async enviarSal(): Promise<string>
   {
-    try
-    {
-      return await this.servicoUsuario.obterSal();
-    }
-    catch( err )
-    {
-      throw err;
-    }
+		try
+		{
+			return await this.servicoUsuario.obterSal();
+		}
+		catch(err)
+		{
+			throw new InternalServerErrorException(
+			{
+				statusCode:"500",
+				msg:"/usuario GET falhou",
+				det:err
+			});
+		}
   }
 
 }

@@ -41,7 +41,12 @@ export class AuthController
     }
     catch( err )
     {
-      throw new InternalServerErrorException({},err);
+      throw new InternalServerErrorException(
+			{
+				statusCode:"500",
+				msg: "/login falhou",
+				det: err
+			});
     }
   }
 
@@ -55,7 +60,12 @@ export class AuthController
     }
     catch(err)
     {
-      throw new InternalServerErrorException({},err);
+      throw new InternalServerErrorException(
+			{
+				statusCode:"500",
+				msg: "/unlogin falhou",
+				det: err
+			});
     }
   }
 

@@ -35,7 +35,7 @@ export class MoveisProvedores
     }
     catch(err)
     {
-      throw new InternalServerErrorException({},err);
+      throw new InternalServerErrorException();
     }
 	}
 
@@ -63,7 +63,7 @@ export class MoveisProvedores
     }
     catch(err)
     {
-      throw new InternalServerErrorException({},err);
+      throw new InternalServerErrorException();
     }
 	}
 
@@ -85,7 +85,7 @@ export class MoveisProvedores
     }
     catch(err)
     {
-      throw new InternalServerErrorException({},err);
+      throw new InternalServerErrorException();
     }
 	}
 }

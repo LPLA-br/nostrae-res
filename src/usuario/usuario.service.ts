@@ -24,7 +24,7 @@ export class UsuarioService
   {
     try
     {
-      const verif = this.usuariosRepositorio.find();
+      const verif = await this.usuariosRepositorio.find();
 
       if( (await verif).length > 0 )
       {
@@ -43,7 +43,12 @@ export class UsuarioService
     }
     catch( err )
     {
-      throw err;
+			throw new InternalServerErrorException(
+			{
+				statusCode:"500",
+				msg:"salvarUsuarioUnico() falhou",
+				det:err
+			});
     }
   }
 
@@ -58,7 +63,12 @@ export class UsuarioService
     }
     catch( err )
     {
-      throw err;
+			throw new InternalServerErrorException(
+			{
+				statusCode:"500",
+				msg:"getUsername() falhou",
+				det:err
+			});
     }
   }
 
@@ -77,7 +87,12 @@ export class UsuarioService
     }
     catch( err )
     {
-      throw err;
+			throw new InternalServerErrorException(
+			{
+				statusCode:"500",
+				msg:"usuarioExiste() falhou",
+				det:err
+			});
     }
   }
 
@@ -92,7 +107,12 @@ export class UsuarioService
     }
     catch(err)
     {
-      throw err;
+			throw new InternalServerErrorException(
+			{
+				statusCode:"500",
+				msg:"obterHash() falhou",
+				det:err
+			});
     }
   }
 
@@ -107,7 +127,12 @@ export class UsuarioService
     }
     catch( err )
     {
-      throw err;
+			throw new InternalServerErrorException(
+			{
+				statusCode:"500",
+				msg:"obterSal() falhou",
+				det:err
+			});
     }
   }
 
@@ -120,7 +145,12 @@ export class UsuarioService
     }
     catch(err)
     {
-      throw new InternalServerErrorException({},err);
+			throw new InternalServerErrorException(
+			{
+				statusCode:"500",
+				msg:"obterToken() falhou",
+				det:err
+			});
     }
   }
 
@@ -133,7 +163,12 @@ export class UsuarioService
     }
     catch( err )
     {
-      throw err;
+			throw new InternalServerErrorException(
+			{
+				statusCode:"500",
+				msg:"salvarToken() falhou",
+				det:err
+			});
     }
   }
 
@@ -146,7 +181,12 @@ export class UsuarioService
     }
     catch( err )
     {
-      throw err;
+			throw new InternalServerErrorException(
+			{
+				statusCode:"500",
+				msg:"deletarToken() falhou",
+				det:err
+			});
     }
   }
 
