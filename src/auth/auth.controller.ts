@@ -36,7 +36,7 @@ export class AuthController
       else
       {
         res
-        .json( auth );
+        .json( { statusCode:"500",msg:"/login POST token inválido" } );
       }
     }
     catch( err )

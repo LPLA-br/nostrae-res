@@ -30,12 +30,21 @@ export class MoveisProvedores
       }
       else
       {
-        throw new UnauthorizedException();
+        throw new UnauthorizedException(
+        {
+          statusCode:"401",
+          msg:"buscarTodos() operação não autorizada",
+        });
       }
     }
     catch(err)
     {
-      throw new InternalServerErrorException();
+      throw new InternalServerErrorException(
+      {
+        statusCode:"500",
+        msg:"buscarTodos() falhou",
+        det:err
+      });
     }
 	}
 
@@ -58,12 +67,21 @@ export class MoveisProvedores
       }
       else
       {
-        throw new UnauthorizedException();
+        throw new UnauthorizedException(
+        {
+          statusCode:"401",
+          msg:"criarRegistro() operação não autorizada",
+        });
       }
     }
     catch(err)
     {
-      throw new InternalServerErrorException();
+      throw new InternalServerErrorException(
+      {
+        statusCode:"500",
+        msg:"criarRegistro() falhou",
+        det:err
+      });
     }
 	}
 
@@ -80,12 +98,21 @@ export class MoveisProvedores
       }
       else
       {
-        throw new UnauthorizedException();
+        throw new UnauthorizedException(
+        {
+          statusCode:"401",
+          msg:"editarRegistroDinamicamente() operação não autorizada",
+        });
       }
     }
     catch(err)
     {
-      throw new InternalServerErrorException();
+      throw new InternalServerErrorException(
+      {
+        statusCode:"401",
+        msg:"editarRegistroDinamicamente() falhou",
+        det:err
+      });
     }
 	}
 }

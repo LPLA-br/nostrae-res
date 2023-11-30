@@ -1,6 +1,7 @@
 import { Controller } from '@nestjs/common';
 import { Get, Post, Put, Patch } from '@nestjs/common';
 import { Body, Req } from '@nestjs/common';
+import { InternalServerErrorException } from '@nestjs/common';
 import { Request } from 'express';
 import { MoveisProvedores } from './moveis.service';
 import { Validacao } from './pipes/validacao.pipe';
@@ -17,7 +18,19 @@ export class MoveisControladoresController
 	@Get()
 	async listarTodosRegistros( @Req() req: Request )
 	{
-    return await this.moveisProvedores.buscarTodos( req.header('Authorization') );
+    try
+    {
+      return await this.moveisProvedores.buscarTodos( req.header('Authorization') );
+    }
+    catch(err)
+    {
+      throw new InternalServerErrorException(
+      {
+        statusCode:"500",
+        msg:"/moveis GET falhou",
+        det:err
+      });
+    }
 	}
 
 	@Post()
@@ -26,7 +39,19 @@ export class MoveisControladoresController
     @Body(new Validacao()) criarRegistroDto: CriarRegistroDto
   ): Promise<Movel[]|Movel>
 	{
+    try
+    {
 		return await this.moveisProvedores.criarRegistro( criarRegistroDto, req.header('Authorization')  );
+    }
+    catch(err)
+    {
+      throw new InternalServerErrorException(
+      {
+        statusCode:"500",
+        msg:"/moveis POST falhou",
+        det:err
+      });
+    }
 	}
 
 	@Patch()
@@ -35,7 +60,19 @@ export class MoveisControladoresController
     @Body(new Validacao()) editarRegistroDto : EditarRegistroDto
   ): Promise<any>
 	{
-		return await this.moveisProvedores.editarRegistroDinamicamente( editarRegistroDto, req.header('Authorization') );
+    try
+    {
+      return await this.moveisProvedores.editarRegistroDinamicamente( editarRegistroDto, req.header('Authorization') );
+    }
+    catch(err)
+    {
+      throw new InternalServerErrorException(
+      {
+        statusCode:"500",
+        msg:"/moveis PATCH falhou",
+        det:err
+      });
+    }
 	}
 
 }
