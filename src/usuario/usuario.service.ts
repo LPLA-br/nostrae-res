@@ -18,7 +18,7 @@ export class UsuarioService
 
   /** Cria usuário único uma vez.
   *   @param {usuario} usuario - dados de usuário
-  *   @
+  *   @returns {string} string json com msg.
   * */
   async salvarUsuarioUnico( usuario: CreateUserDto ): Promise<Usuario|string>
   {
@@ -43,12 +43,7 @@ export class UsuarioService
     }
     catch( err )
     {
-			throw new InternalServerErrorException(
-			{
-				statusCode:"500",
-				msg:"salvarUsuarioUnico() falhou",
-				det:err
-			});
+			throw new Error( err );
     }
   }
 
@@ -63,12 +58,7 @@ export class UsuarioService
     }
     catch( err )
     {
-			throw new InternalServerErrorException(
-			{
-				statusCode:"500",
-				msg:"getUsername() falhou",
-				det:err
-			});
+			throw new Error( err );
     }
   }
 
@@ -87,12 +77,7 @@ export class UsuarioService
     }
     catch( err )
     {
-			throw new InternalServerErrorException(
-			{
-				statusCode:"500",
-				msg:"usuarioExiste() falhou",
-				det:err
-			});
+			throw new Error( err );
     }
   }
 
@@ -107,12 +92,7 @@ export class UsuarioService
     }
     catch(err)
     {
-			throw new InternalServerErrorException(
-			{
-				statusCode:"500",
-				msg:"obterHash() falhou",
-				det:err
-			});
+			throw new Error( err );
     }
   }
 
@@ -127,12 +107,7 @@ export class UsuarioService
     }
     catch( err )
     {
-			throw new InternalServerErrorException(
-			{
-				statusCode:"500",
-				msg:"obterSal() falhou",
-				det:err
-			});
+			throw new Error( err );
     }
   }
 
@@ -145,12 +120,7 @@ export class UsuarioService
     }
     catch(err)
     {
-			throw new InternalServerErrorException(
-			{
-				statusCode:"500",
-				msg:"obterToken() falhou",
-				det:err
-			});
+			throw new Error( err );
     }
   }
 
@@ -163,12 +133,7 @@ export class UsuarioService
     }
     catch( err )
     {
-			throw new InternalServerErrorException(
-			{
-				statusCode:"500",
-				msg:"salvarToken() falhou",
-				det:err
-			});
+			throw new Error( err );
     }
   }
 
@@ -181,12 +146,7 @@ export class UsuarioService
     }
     catch( err )
     {
-			throw new InternalServerErrorException(
-			{
-				statusCode:"500",
-				msg:"deletarToken() falhou",
-				det:err
-			});
+			throw new Error( err );
     }
   }
 

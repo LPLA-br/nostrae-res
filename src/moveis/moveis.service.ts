@@ -30,21 +30,12 @@ export class MoveisProvedores
       }
       else
       {
-        throw new UnauthorizedException(
-        {
-          statusCode:"401",
-          msg:"buscarTodos() operação não autorizada",
-        });
+        throw new Error( 'buscarTodos() operação não autorizada' )
       }
     }
     catch(err)
     {
-      throw new InternalServerErrorException(
-      {
-        statusCode:"500",
-        msg:"buscarTodos() falhou",
-        det:err
-      });
+      throw new Error( err );
     }
 	}
 
@@ -67,22 +58,13 @@ export class MoveisProvedores
       }
       else
       {
-        throw new UnauthorizedException(
-        {
-          statusCode:"401",
-          msg:"criarRegistro() operação não autorizada",
-        });
+        throw new Error( 'criarRegistro() operação não autorizada' );
       }
     }
     catch(err)
     {
-      throw new InternalServerErrorException(
-      {
-        statusCode:"500",
-        msg:"criarRegistro() falhou",
-        det:err
-      });
-    }
+      throw new Error( err );
+		}
 	}
 
 	/** Utiliza dto parcial para atualização parcial do registro (datamask).
@@ -98,21 +80,12 @@ export class MoveisProvedores
       }
       else
       {
-        throw new UnauthorizedException(
-        {
-          statusCode:"401",
-          msg:"editarRegistroDinamicamente() operação não autorizada",
-        });
+        throw new Error( 'editarRegistroDinamicamente() não autorizado' );
       }
     }
     catch(err)
     {
-      throw new InternalServerErrorException(
-      {
-        statusCode:"401",
-        msg:"editarRegistroDinamicamente() falhou",
-        det:err
-      });
+      throw new Error( err );
     }
 	}
 }

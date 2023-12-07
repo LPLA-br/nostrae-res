@@ -48,22 +48,32 @@ class ComponentesVisuais:
         pass
 
     def barra():
+        system('clear')
         print("############################################################################")
 
     def inicio():
+        system('clear')
         print("#################################################################################")
         print("#                NOSTRAE_RES SOFTWARE - LPLA-br 2023                            #")
         print("#Software livre com absolutamente NENHUMA GARANTIA, na medida permitida por lei.#")
         print("#################################################################################\n\n")
 
     def anteAcesso():
+        system('clear')
         print("ACESSO AO SISTEMA\n")
 
     def menu():
+        system('clear')
         print("1.registrar novo bem institucional")
         print("2.gerar relatorio do status quo e visualiza-lo")
-        print("3.editar registro errático")
+        print("3.editar registro incorreto")
         print("4.sair")
+
+    def saida():
+        system('clear')
+        print("#######################")
+        print("#  nostrae-res end    #")
+        print("#######################")
 
 
 
@@ -113,15 +123,24 @@ class Aplicacao:
         self.visual = ComponentesVisuais()
         self.valido = Validador()
 
-    # {hashsenha:string,sal:string} protected
-    def gerarHash(self, senha):
+    #protected
+    def gerarHash(self, senha):#{hashsenha:string,sal:string}
         senha = bytes( senha, 'utf-8')
         sal = self.aleat.gerarStringHexadecimalPseudoAleatoria( HASH_SIZE )
         hashsenha = sha256( senha + sal ).hexdigest()
         return { "hashsenha": hashsenha, "sal", sal }
 
-    # True|False
-    def criarUsuarioUnico(self, ):
+    # protected
+    def obterSal(self):#res|''
+        self.cli.request( 'GET', '/usuario' )
+        res = self.cli.getresponse()
+
+        if self.valido.objeto( ['sal'], res ):
+            return res
+        else:
+            return ''
+
+    def criarUsuarioUnico(self, ):#True|False
         requisicao = {}
 
         requisicao.update( { "username": input('username>') } ) 
@@ -133,18 +152,7 @@ class Aplicacao:
 
         return self.valido.objeto( ['username','hashsenha','sal'], res )
 
-    # res|'' protected
-    def obterSal(self):
-        self.cli.request( 'GET', '/usuario' )
-        res = self.cli.getresponse()
-
-        if self.valido.objeto( ['sal'], res ):
-            return res
-        else:
-            return ''
-
-    # True | False
-    def login(self):
+    def login(self):#True|False
 
         senha = bytes(input('senha> '), 'utf-8')
         sal = self.obterSal()
@@ -163,8 +171,8 @@ class Aplicacao:
         return False
             
 
-    # True | False
-    def sair(self):
+    
+    def sair(self):# True | False
         self.disco.sobrescreverArquivoLocal( {"Authentication":"vazio"} )
         self.disco.carregarArquivoLocalMemoria()
 
@@ -188,8 +196,7 @@ class Aplicacao:
 
         print(res)
 
-    # resposta:any
-    def gerarRelatorio(self):
+    def gerarRelatorio(self):# resposta:any
         self.cli.request( 'GET', '/moveis', {}, {"Authorization":self.disco.get_dados()['Authentication'], } )
         res = self.cli.getresponse()
         print(res)

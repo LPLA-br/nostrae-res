@@ -64,22 +64,13 @@ export class AuthServiceUsuario
 				}
 				else
 				{
-					throw new UnauthorizedException(
-					{
-						statusCode: "401",
-						msg:"não autorizado credencial de senha inválida"
-					});
+					throw new Error( 'Não autorizado: credencial de senha inválida' );
 				}
 			}
 		}
 		catch( err )
 		{
-			throw new InternalServerErrorException(
-			{
-				statusCode: "500",
-				msg:"validarParaSessao() falhou",
-				det:err
-			});
+			throw new Error( err );
 		}
   }
 
@@ -100,12 +91,7 @@ export class AuthServiceUsuario
     }
     catch( err )
     {
-      throw new UnauthorizedException(
-			{
-				statusCode: "500",
-				msg: "autorizacao() falhou",
-				det: err
-			});
+      throw new UnauthorizedException( err );
     }
   }
 
@@ -114,16 +100,11 @@ export class AuthServiceUsuario
     try
     {
       await this.servicoUsuarios.deletarToken();
-      return '{"statusCode":200}';
+			return '{statusCode:200}';
     }
     catch(err)
     {
-      throw new InternalServerErrorException(
-			{
-				statusCode: "500",
-				msg: "encerrarSessao() token não removido",
-				det: err
-			});
+      throw new Error( err );
     }
   }
 
