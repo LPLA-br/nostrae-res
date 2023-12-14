@@ -1,14 +1,17 @@
 import { Controller } from '@nestjs/common';
-import { Post, Delete } from '@nestjs/common';
-import { InternalServerErrorException } from '@nestjs/common';
+import { Post, Get } from '@nestjs/common';
 import { Body } from '@nestjs/common';
 import { Res } from '@nestjs/common';
 import { Response } from 'express';
 import { HttpCode, HttpStatus } from '@nestjs/common';
-import { AuthServiceUsuario } from './auth.service';
 import { ValidationPipe } from '@nestjs/common';
+import { NotImplementedException } from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
 
 import { UserHashDto } from './dto/hashsenha.dto';
+
+import { AuthServiceUsuario } from './auth.service';
+import { AuthGuard } from './auth.guard';
 
 @Controller('auth')
 export class AuthController
@@ -23,50 +26,18 @@ export class AuthController
     @Res() res: Response
   ): Promise<any>
   {
-    try
-    {
-      const auth = await this.authServico.validarParaSessao( hashsenha.hashsenha );
-
-      if ( auth.acess_token.length > 3 )
-      {
-        res
-        .header("Authentication", auth.acess_token )
-        .json( auth );
-      }
-      else
-      {
-        res
-        .json( { statusCode:"500",msg:"/login POST token inválido" } );
-      }
-    }
-    catch( err )
-    {
-      throw new InternalServerErrorException(
-			{
-				statusCode:"500",
-				msg: "/login falhou",
-				det: err
-			});
-    }
+			const auth = await this.authServico.validarParaSessao( hashsenha?.hashsenha );
+			res
+			.header("Authentication", auth.acess_token )
+			.json( auth );
   }
 
-  @Delete('unlogin')
+  @Get()
+	@UseGuards(AuthGuard)
   @HttpCode(HttpStatus.OK)
-  async encerrarSessao(): Promise<any>
+  async none(): Promise<any>
   {
-    try
-    {
-      return await this.authServico.encerrarSessao();
-    }
-    catch(err)
-    {
-      throw new InternalServerErrorException(
-			{
-				statusCode:"500",
-				msg: "/unlogin falhou",
-				det: err
-			});
-    }
-  }
-
+		throw new NotImplementedException();
+	}
 }
+

@@ -64,20 +64,29 @@ export class AuthServiceUsuario
 				}
 				else
 				{
-					throw new Error( 'Não autorizado: credencial de senha inválida' );
+					throw new UnauthorizedException(
+					{
+						statusCode: 401,
+						msg: 'senha em hash ou login informados não estão corretos'
+					});
 				}
 			}
 		}
 		catch( err )
 		{
-			throw new Error( err );
+			throw new InternalServerErrorException(
+			{
+				statusCode: 500,
+				msg: 'validarParaSessao()'
+			});
 		}
   }
 
-  /** Recebe token do cliente e retorna permissão para ação.
+  /* Recebe token do cliente e retorna permissão para ação.
+	 *  DESCARTADO DEVIDO CONHECIMENTO DO FUNCIONAMENTO DO JWT
    *  @param {string} token do usuário único.
    *  @returns {boolean} permissão
-  * */
+	 *
   async autorizacao( token:string ): Promise<boolean>
   {
     try
@@ -93,8 +102,9 @@ export class AuthServiceUsuario
     {
       throw new UnauthorizedException( err );
     }
-  }
+  }*/
 
+	/* DESCARTADO DEVIDO A CONHECIMENTO DO FUNCIONAMENTO DO JWT
   async encerrarSessao(): Promise<any>
   {
     try
@@ -107,5 +117,6 @@ export class AuthServiceUsuario
       throw new Error( err );
     }
   }
+	*/
 
 }
