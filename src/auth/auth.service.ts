@@ -13,37 +13,6 @@ export class AuthServiceUsuario
   )
   {}
 
-  /** Gera id decimal pseudo aleatório de 32 caracteres.
-  *   @returns {string} id decimal de 32 caracteres.*/
-  private gerarIdDecimal(): string
-  {
-    let min = 0;
-    let max = 9;
-    let id: string = '';
-    for (let i = 0; i < 32; i++ )
-    {
-      let num = Math.floor(Math. random() * (max - min + 1)) + min;
-      id = id.concat( num.toString() ) ;
-    }
-    return id;
-  }
-
-  /** Gera token decimal com duração de 6 horas
-  *   @returns {{acess_token:string}} objeto com string token*/
-  private async gerarJWT(): Promise<{acess_token:string}>
-  {
-    let payload: string;
-
-    payload = this.jwtService.sign(
-    {
-      token: this.gerarIdDecimal(),
-    });
-
-    return {
-      acess_token: payload
-    }
-  }
-
   /** Acesso ao sistema monousuário.
    *  @param {string} hashsenha - hash da senha gerado no cliente para comparação.
    *  @returns {{acess_token:string}} token para o cliente assinar suas ações nas rotas de funcionalidade. 
@@ -56,11 +25,18 @@ export class AuthServiceUsuario
 			{
 				const hash = await this.servicoUsuarios.obterHash();
 
+        if ( hash.length == 0 ) throw new Error('{"status":500,"msg":"hash vazio"}');
+
 				if ( hash === hashsenha )
 				{
-					const token = await this.gerarJWT();
-					await this.servicoUsuarios.salvarToken( token.acess_token );
-					return token;
+          const payload = this.jwtService.sign(
+          {
+            sub: await this.servicoUsuarios.getUsername(),
+          });
+
+          return {
+            acess_token: payload
+          }
 				}
 				else
 				{
@@ -77,7 +53,8 @@ export class AuthServiceUsuario
 			throw new InternalServerErrorException(
 			{
 				statusCode: 500,
-				msg: 'validarParaSessao()'
+				msg: 'validarParaSessao()',
+        err: err
 			});
 		}
   }

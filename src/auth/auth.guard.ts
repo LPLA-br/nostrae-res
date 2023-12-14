@@ -45,7 +45,8 @@ export class AuthGuard implements CanActivate
 
 	extrairTokenDoHeader(request: Request): string
 	{
-		return request.headers.authorization.split('').toString();
+    const token = request.headers.authorization?.toString();
+    return token;
 	}
 
 }

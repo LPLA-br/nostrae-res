@@ -9,8 +9,6 @@ import { CreateUserDto } from './dto/criarUsuario.dto';
 export class UsuarioService
 {
 
-  private readonly id: number = 2;
-
   constructor(
     @InjectRepository(Usuario) private usuariosRepositorio: Repository<Usuario>,
   )
@@ -26,25 +24,34 @@ export class UsuarioService
     {
       const verif = await this.usuariosRepositorio.find();
 
-      if( (await verif).length > 0 )
+      if( (verif).length > 0 )
       {
-        return '{"msg":"usuario unico existe"}';
+        return '{"statusCode":204,"msg":"usuario existe"}';
       }
 
       const novoUsuario = this.usuariosRepositorio.create(
       {
-        id:         this.id,
         username:   usuario.username,
         hashsenha:  usuario.hashsenha,
         sal:        usuario.sal
       });
-
       return this.usuariosRepositorio.save( novoUsuario );
     }
     catch( err )
     {
-			throw new Error( err );
+			throw new InternalServerErrorException(
+      {
+        statusCode: 500,
+        msg: 'salvarUsuarioUnico() falhou',
+        err: err
+      });
     }
+  }
+
+  /** Retorna lista de usuários*/
+  async usuarios(): Promise<Usuario[]>
+  {
+    return this.usuariosRepositorio.find();
   }
 
   /** Retorna nome do usuário ou string vazia.
@@ -54,11 +61,20 @@ export class UsuarioService
   {
     try
     {
-      return (await this.usuariosRepositorio.findOne({where:{id:this.id}})).username.toString();
+      const usuario = await this.usuariosRepositorio.find();
+      if ( usuario.length == 1 )
+      {
+        return (await this.usuariosRepositorio.findOne({where:{id:usuario[0].id}})).username.toString();
+      }
+      return '';
     }
     catch( err )
     {
-			throw new Error( err );
+			throw new InternalServerErrorException({
+        statusCode: 500,
+        msg: 'getUsername() falhou',
+        err: err
+      });
     }
   }
 
@@ -69,7 +85,8 @@ export class UsuarioService
   {
     try
     {
-      if ( (await this.usuariosRepositorio.findOne({where:{id:this.id}})).id == this.id )
+      const usuario = this.usuariosRepositorio.find();
+      if ( (await usuario).length > 0 )
       {
         return true;
       }
@@ -77,7 +94,11 @@ export class UsuarioService
     }
     catch( err )
     {
-			throw new Error( err );
+			throw new InternalServerErrorException({
+        statusCode: 500,
+        msg: 'usuarioExiste() falhou',
+        err: err
+      });
     }
   }
 
@@ -88,11 +109,20 @@ export class UsuarioService
   {
     try
     {
-      return (await this.usuariosRepositorio.findOne({where:{id:this.id}})).hashsenha.toString();
+      const usuario = this.usuariosRepositorio.find();
+      if ( (await usuario).length == 1 )
+      {
+        return usuario[0].hashsenha.toString();
+      }
+      return '';
     }
     catch(err)
     {
-			throw new Error( err );
+			throw new InternalServerErrorException({
+        statusCode: 500,
+        msg: 'obterHash() falhou',
+        err: err
+      });
     }
   }
 
@@ -103,14 +133,24 @@ export class UsuarioService
   {
     try
     {
-      return (await this.usuariosRepositorio.findOne({where:{id:this.id}})).sal.toString();
+      const usuario = this.usuariosRepositorio.find();
+      if ( (await usuario).length == 1 )
+      {
+        return usuario[0].sal.toString();
+      }
+      return '';
     }
     catch( err )
     {
-			throw new Error( err );
+			throw new InternalServerErrorException({
+        statusCode: 500,
+        msg: 'obterSal() falhou',
+        err: err
+      });
     }
   }
 
+  /*descartado
   async obterToken(): Promise<string>
   {
     try
@@ -120,7 +160,11 @@ export class UsuarioService
     }
     catch(err)
     {
-			throw new Error( err );
+			throw new InternalServerErrorException({
+        statusCode: 500,
+        msg: 'obterToken() falhou',
+        err: err
+      });
     }
   }
 
@@ -133,7 +177,11 @@ export class UsuarioService
     }
     catch( err )
     {
-			throw new Error( err );
+			throw new InternalServerErrorException({
+        statusCode: 500,
+        msg: 'salvarToken() falhou',
+        err: err
+      });
     }
   }
 
@@ -146,9 +194,13 @@ export class UsuarioService
     }
     catch( err )
     {
-			throw new Error( err );
+			throw new InternalServerErrorException({
+        statusCode: 500,
+        msg: 'deletarToken() falhou',
+        err: err
+      });
     }
-  }
+  }*/
 
 }
 

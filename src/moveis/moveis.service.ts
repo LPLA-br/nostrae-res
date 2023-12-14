@@ -24,18 +24,16 @@ export class MoveisProvedores
 	{
     try
     {
-      if ( (await this.authServiceUsuario.autorizacao( authToken )) )
-      {
-        return this.movelRepo.find();
-      }
-      else
-      {
-        throw new Error( 'buscarTodos() operação não autorizada' )
-      }
+      return await this.movelRepo.find();
     }
     catch(err)
     {
-      throw new Error( err );
+      throw new InternalServerErrorException(
+      {
+        statusCode: 500,
+        msg: 'buscarTodos() falhou',
+        det: err
+      });
     }
 	}
 
@@ -43,27 +41,25 @@ export class MoveisProvedores
   {
     try
     {
-      if ( (await this.authServiceUsuario.autorizacao( authToken )) )
-      {
-        const reg = this.movelRepo.create({
-          descricao:	 registro.descricao,
-          marca:			 registro.marca,
-          categoria:	 registro.categoria,
-          anoAquisicao:registro.anoAquisicao,
-          localizacao: registro.localizacao,
-          utilizavel:	 registro.utilizavel
-        });
+      const reg = this.movelRepo.create({
+        descricao:	 registro.descricao,
+        marca:			 registro.marca,
+        categoria:	 registro.categoria,
+        anoAquisicao:registro.anoAquisicao,
+        localizacao: registro.localizacao,
+        utilizavel:	 registro.utilizavel
+      });
 
-        return await this.movelRepo.save( reg );
-      }
-      else
-      {
-        throw new Error( 'criarRegistro() operação não autorizada' );
-      }
+      return await this.movelRepo.save( reg );
     }
     catch(err)
     {
-      throw new Error( err );
+      throw new InternalServerErrorException(
+      {
+        statusCode: 500,
+        msg: 'criarRegistro() falhou',
+        det: err
+      });
 		}
 	}
 
@@ -74,18 +70,16 @@ export class MoveisProvedores
 	{
     try
     {
-      if ( (await this.authServiceUsuario.autorizacao( authToken )) )
-      {
-        return await this.movelRepo.update('id', registroParcial );
-      }
-      else
-      {
-        throw new Error( 'editarRegistroDinamicamente() não autorizado' );
-      }
+      return await this.movelRepo.update( 'id', registroParcial );
     }
     catch(err)
     {
-      throw new Error( err );
+      throw new InternalServerErrorException(
+      {
+        statusCode: 500,
+        msg: 'criarRegistroDinamicamente() falhou',
+        det: err
+      });
     }
 	}
 }
