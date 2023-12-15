@@ -1,5 +1,5 @@
 import { Controller } from '@nestjs/common';
-import { Get, Post, Put, Patch } from '@nestjs/common';
+import { Get, Post, Patch } from '@nestjs/common';
 import { Body, Req } from '@nestjs/common';
 import { Request } from 'express';
 import { MoveisProvedores } from './moveis.service';

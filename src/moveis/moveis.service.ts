@@ -5,14 +5,12 @@ import { Repository } from 'typeorm';
 import { Movel } from './entidades/movel.entidade';
 import { CriarRegistroDto } from './dto/criarRegistro.dto';
 import { EditarRegistroDto } from './dto/editarRegistro.dto';
-import { AuthServiceUsuario } from 'src/auth/auth.service';
 
 @Injectable()
 export class MoveisProvedores
 {
 	constructor(
-    @InjectRepository(Movel) private movelRepo: Repository<Movel>,
-    private readonly authServiceUsuario: AuthServiceUsuario
+    @InjectRepository(Movel) private movelRepo: Repository<Movel>
   )
 	{}
 

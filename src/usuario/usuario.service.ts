@@ -85,8 +85,8 @@ export class UsuarioService
   {
     try
     {
-      const usuario = this.usuariosRepositorio.find();
-      if ( (await usuario).length > 0 )
+      const usuario = await this.usuariosRepositorio.find();
+      if ( usuario.length > 0 )
       {
         return true;
       }
@@ -109,8 +109,8 @@ export class UsuarioService
   {
     try
     {
-      const usuario = this.usuariosRepositorio.find();
-      if ( (await usuario).length == 1 )
+      const usuario = await this.usuariosRepositorio.find();
+      if ( usuario.length == 1 )
       {
         return usuario[0].hashsenha.toString();
       }
@@ -133,8 +133,8 @@ export class UsuarioService
   {
     try
     {
-      const usuario = this.usuariosRepositorio.find();
-      if ( (await usuario).length == 1 )
+      const usuario = await this.usuariosRepositorio.find();
+      if ( usuario.length == 1 )
       {
         return usuario[0].sal.toString();
       }
