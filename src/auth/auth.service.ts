@@ -17,7 +17,7 @@ export class AuthServiceUsuario
    *  @param {string} hashsenha - hash da senha gerado no cliente para comparação.
    *  @returns {{acess_token:string}} token para o cliente assinar suas ações nas rotas de funcionalidade. 
   * */
-  async validarParaSessao( hashsenha: string ): Promise<{acess_token:string}>
+  async validarParaSessao( hashsenha: string ): Promise<{status:number,acess_token:string}>
   {
 		try
 		{
@@ -35,6 +35,7 @@ export class AuthServiceUsuario
           });
 
           return {
+            status: 200,
             acess_token: payload
           }
 				}

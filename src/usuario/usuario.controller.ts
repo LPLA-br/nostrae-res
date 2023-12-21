@@ -32,7 +32,6 @@ export class UsuarioController
   }
 
   @Get()
-  @UseGuards(AuthGuard)
   async enviarSal(): Promise<string>
   {
     return await this.servicoUsuario.obterSal();

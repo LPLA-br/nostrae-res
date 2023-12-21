@@ -11,6 +11,8 @@ import { EditarRegistroDto } from './dto/editarRegistro.dto';
 import { UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/auth.guard';
 
+import { Retorno } from './moveis.service';
+
 @Controller('moveis')
 export class MoveisControladoresController
 {
@@ -27,21 +29,19 @@ export class MoveisControladoresController
 	@Post()
   @UseGuards(AuthGuard)
 	async criarRegistro(
-    @Req() req: Request,
     @Body(new Validacao()) criarRegistroDto: CriarRegistroDto
-  ): Promise<Movel[]|Movel>
+  ): Promise<Retorno>
 	{
-		return await this.moveisProvedores.criarRegistro( criarRegistroDto, req.header('Authorization')  );
+		return await this.moveisProvedores.criarRegistro( criarRegistroDto );
 	}
 
 	@Patch()
   @UseGuards(AuthGuard)
 	async atualizarRegistroParcialmente(
-    @Req() req: Request,
     @Body(new Validacao()) editarRegistroDto : EditarRegistroDto
   ): Promise<any>
 	{
-    return await this.moveisProvedores.editarRegistroDinamicamente( editarRegistroDto, req.header('Authorization') );
+    return await this.moveisProvedores.editarRegistroDinamicamente( editarRegistroDto );
 	}
 
 }

@@ -6,11 +6,8 @@ from random import randrange
 from os import system
 import json
 
-# CLIENTE DA APLICAÇÃO NOSTRAE RES
-# Front-end em next.js descartado
-# devido à complexidade maior
-# no projeto: Tempo e projetos concorrentes
-# mais importantes.
+# cliente descartado em favor de integração com shellscript
+# mais uma camada de simplificação.
 
 class Aleat:
 

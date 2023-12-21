@@ -6,6 +6,11 @@ import { Movel } from './entidades/movel.entidade';
 import { CriarRegistroDto } from './dto/criarRegistro.dto';
 import { EditarRegistroDto } from './dto/editarRegistro.dto';
 
+export type Retorno = {
+  status: number,
+  result: Movel[] | Movel
+};
+
 @Injectable()
 export class MoveisProvedores
 {
@@ -18,11 +23,14 @@ export class MoveisProvedores
    * @param {string} authToken - token enviado.
    * @returns {Movel[]|string}
 	* **/
-	async buscarTodos( authToken:string ): Promise<Movel[]|string>
+	async buscarTodos( authToken:string ): Promise<Retorno|string>
 	{
     try
     {
-      return await this.movelRepo.find();
+      return {
+        status: 200,
+        result: await this.movelRepo.find()
+      };
     }
     catch(err)
     {
@@ -35,7 +43,7 @@ export class MoveisProvedores
     }
 	}
 
-  async criarRegistro( registro: CriarRegistroDto, authToken:string ): Promise<Movel>
+  async criarRegistro( registro: CriarRegistroDto ): Promise<Retorno>
   {
     try
     {
@@ -48,7 +56,10 @@ export class MoveisProvedores
         utilizavel:	 registro.utilizavel
       });
 
-      return await this.movelRepo.save( reg );
+      return {
+        status: 200,
+        result: await this.movelRepo.save( reg )
+      };
     }
     catch(err)
     {
@@ -64,11 +75,15 @@ export class MoveisProvedores
 	/** Utiliza dto parcial para atualização parcial do registro (datamask).
 	 *  @param {EditarRegistroDto} registroParcial - objeto com campos editatum.
 	* */
-	async editarRegistroDinamicamente( registroParcial: EditarRegistroDto, authToken:string )
+	async editarRegistroDinamicamente( registroParcial: EditarRegistroDto )
+  : Promise<any>
 	{
     try
     {
-      return await this.movelRepo.update( 'id', registroParcial );
+      return {
+        status: 200,
+        result: await this.movelRepo.update( 'id', registroParcial )
+      }
     }
     catch(err)
     {

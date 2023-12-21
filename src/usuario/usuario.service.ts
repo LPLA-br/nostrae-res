@@ -136,7 +136,7 @@ export class UsuarioService
       const usuario = await this.usuariosRepositorio.find();
       if ( usuario.length == 1 )
       {
-        return usuario[0].sal.toString();
+        return `{"sal":"${usuario[0].sal.toString()}}`
       }
       return '';
     }

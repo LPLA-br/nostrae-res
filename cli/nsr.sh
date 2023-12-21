@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # Controle de patrimônio físico
-# script opcional.
+# script opcional. cada curl necessita
+# de tratamento json com python.
 
 SERVIDOR='127.0.0.1:8080/'
 
@@ -12,30 +13,35 @@ criarUsuario()
 
 	#geração do hash. Verificação no servidor = hash+senha (concatenação simples)
 	read -p 'nome do usuário> ' USUARIO ;
-	read -p 'senha> ' USUARIO ;
-	HASH=cat /dev/urandom | head -n 1 | sha256sum | cut --delimiter=' ' --fields='1' ;
+	read -p 'senha> ' SENHA ;
 
-	curl --request GET "$SERVIDOR/usuario" \
-	-H 'Content-Type: application/json' | tee ./sal
+	SAL=cat /dev/urandom | head -n 1 | sha256sum | cut --delimiter=' ' --fields='1' ;
+  HASHSENHA=echo "$SENHA$SAL" | sha256sum | cut -f 1 -d ' ';
 
+	curl --request POST "$SERVIDOR/usuario" \
+	-H 'Content-Type: application/json'
+  -d "{\"username\":\"$USUARIO\",\"senha\":"$HASHSENHA",\"sal\":\"$SAL\"}" ;
+
+  clear;
 }
 
 autenticar()
 {
-	#get sal.
-	curl --request GET "$SERVIDOR/usuario" \
-	-H 'Content-Type: application/json' | tee ./sal
+	read -p 'nome do usuário> ' USUARIO ;
+	read -p 'senha> ' SENHA ;
 
-	#
-	curl --request POST "$SERVIDOR/usuario" \
+	SAL=curl --request GET "$SERVIDOR/usuario" | ./componente.py extrairsal;
+  HASHSENHA=echo "$SENHA$SAL" | sha256sum | cut -f 1 -d ' ';
+
+	curl -v --request POST "$SERVIDOR/auth/login" \
 	-H 'Content-Type: application/json' \
-	-d '{ "":"" }' | tee ./token
+  -d "{\"hashsenha\":\"$HASHSENHA\"}" 2>&1 | grep Authentication > ./token ;
+
 }
 
 #geração do relatório
 relatorioPorData()
 {
-	#integrar script python
 }
 
 relatorioPorTipoDePatrimonio()
