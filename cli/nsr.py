@@ -141,13 +141,13 @@ class Aplicacao:
             return ''
 
     def criarUsuarioUnico(self, ):#True|False
-        requisicao = {}
+        corpo = {}
 
-        requisicao.update( { "username": input('username>') } ) 
+        corpo.update( { "username": input('username>') } ) 
         hashGerado = self.gerarHash( input('senha>') )
-        requisicao.update( hashGerado )
+        corpo.update( hashGerado )
 
-        self.cli.request( 'POST', '/usuario', requisicao )
+        self.cli.request( 'POST', '/usuario', corpo )
         res = self.cli.getresponse()
 
         return self.valido.objeto( ['username','hashsenha','sal'], res )
