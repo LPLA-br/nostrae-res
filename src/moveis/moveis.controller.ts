@@ -1,6 +1,6 @@
 import { Controller } from '@nestjs/common';
 import { Get, Post, Patch } from '@nestjs/common';
-import { Body, Req } from '@nestjs/common';
+import { Body, Req, Query } from '@nestjs/common';
 import { Request } from 'express';
 import { MoveisProvedores } from './moveis.service';
 import { Validacao } from './pipes/validacao.pipe';
@@ -24,6 +24,24 @@ export class MoveisControladoresController
 	async listarTodosRegistros( @Req() req: Request )
 	{
     return await this.moveisProvedores.buscarTodos( req.header('Authorization') );
+	}
+
+	/** Relatório: queryString: anoAquisicao, localizacao, categoria
+	* 	Um parâmetro por vêz*/
+	@Get('/relatorio')
+	@UseGuards(AuthGuard)
+	async registroDeTalAno(
+		@Query( 'anoAquisicao' ) anoAquisicao: number,
+		@Query( 'categoria' ) categoria: string,
+		@Query( 'localizacao' ) localizacao: string
+	): Promise<any>
+	{
+		if ( typeof anoAquisicao == 'number' )
+			return await this.moveisProvedores.buscarAnoAquisicao( anoAquisicao );
+		else if ( typeof categoria == 'string' )
+			return await this.moveisProvedores.buscarCategoria( categoria );
+		else if ( typeof localizacao == 'string' )
+			return await this.moveisProvedores.buscarCategoria( localizacao );
 	}
 
 	@Post()

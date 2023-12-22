@@ -36,8 +36,68 @@ export class MoveisProvedores
     {
       throw new InternalServerErrorException(
       {
-        statusCode: 500,
+        status: 500,
         msg: 'buscarTodos() falhou',
+        det: err
+      });
+    }
+	}
+
+	async buscarAnoAquisicao( anoAquisicao: number ): Promise<Retorno|string>
+	{
+		try
+		{
+			return {
+				status: 200,
+				result: await this.movelRepo.find({where:{anoAquisicao:anoAquisicao}})
+			};
+		}
+    catch(err)
+    {
+      throw new InternalServerErrorException(
+      {
+        status: 500,
+        msg: '',
+        det: err
+      });
+    }
+	}
+
+	async buscarCategoria( categoria: string ): Promise<Retorno|string>
+	{
+		try
+		{
+			return {
+				status: 200,
+				result: await this.movelRepo.find({where:{categoria:categoria}})
+			};
+		}
+    catch(err)
+    {
+      throw new InternalServerErrorException(
+      {
+        status: 500,
+        msg: '',
+        det: err
+      });
+    }
+	}
+
+	async buscarLocalizacao( localizacao: string ): Promise<Retorno|string>
+	{
+		try
+		{
+			return {
+				status: 200,
+				result: await this.movelRepo.find({where:{localizacao:localizacao}})
+			};
+		}
+    catch(err)
+    {
+      throw new InternalServerErrorException(
+      {
+        status: 500,
+        msg: '',
         det: err
       });
     }
@@ -65,7 +125,7 @@ export class MoveisProvedores
     {
       throw new InternalServerErrorException(
       {
-        statusCode: 500,
+        status: 500,
         msg: 'criarRegistro() falhou',
         det: err
       });
@@ -89,7 +149,7 @@ export class MoveisProvedores
     {
       throw new InternalServerErrorException(
       {
-        statusCode: 500,
+        status: 500,
         msg: 'criarRegistroDinamicamente() falhou',
         det: err
       });

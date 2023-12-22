@@ -28,7 +28,7 @@ export class CriarRegistroDto
 
   @IsNotEmpty({message:'campo utilizavel vazio'})
   @IsBoolean({message:'utilizavel não boolean'})
-  utilizavel: boolean;
+  utilizavel?: boolean;
 
 };
 
