@@ -17,7 +17,7 @@ elif argv[1] == 'status':
         print( "Ação falhou" )
     elif d["status"] == 200:
         print( "feito!" )
-    else
+    else:
         print( d["status"] )
 elif argv[1] == 'extrairdados':
     # cada objeto em linha separada na saída

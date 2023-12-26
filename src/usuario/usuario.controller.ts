@@ -38,10 +38,10 @@ export class UsuarioController
   }
 
   /* Método não público */
-  @Get('lista')
-  async listaUsuarios(): Promise<Usuario[]>
+  @Get('existe')
+  async listaUsuarios(): Promise<boolean>
   {
-    return this.servicoUsuario.usuarios();
+    return this.servicoUsuario.usuarioExiste();
   }
 
 }

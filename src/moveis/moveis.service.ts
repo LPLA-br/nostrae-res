@@ -113,7 +113,6 @@ export class MoveisProvedores
         categoria:	 registro.categoria,
         anoAquisicao:registro.anoAquisicao,
         localizacao: registro.localizacao,
-        utilizavel:	 registro.utilizavel
       });
 
       return {

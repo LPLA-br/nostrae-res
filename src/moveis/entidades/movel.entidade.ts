@@ -22,8 +22,5 @@ export class Movel
 	@Column({ nullable: true })
 	localizacao: string;
 
-	@Column({ nullable: false })
-	utilizavel: boolean
-
 }
 

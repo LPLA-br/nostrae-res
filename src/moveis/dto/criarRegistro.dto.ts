@@ -26,9 +26,5 @@ export class CriarRegistroDto
   @IsString({message:'localizacao não string'})
   localizacao: string;
 
-  @IsNotEmpty({message:'campo utilizavel vazio'})
-  @IsBoolean({message:'utilizavel não boolean'})
-  utilizavel?: boolean;
-
 };
 
