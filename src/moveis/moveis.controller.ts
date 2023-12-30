@@ -1,6 +1,6 @@
 import { Controller } from '@nestjs/common';
 import { Get, Post, Patch } from '@nestjs/common';
-import { Body, Req, Query } from '@nestjs/common';
+import { Body, Req, Query, Param } from '@nestjs/common';
 import { Request } from 'express';
 import { MoveisProvedores } from './moveis.service';
 import { Validacao } from './pipes/validacao.pipe';
@@ -31,17 +31,19 @@ export class MoveisControladoresController
 	@Get('/relatorio')
 	@UseGuards(AuthGuard)
 	async registroDeTalAno(
-		@Query( 'anoAquisicao' ) anoAquisicao: number,
+		@Query( 'ano' ) anoAquisicao: string,
 		@Query( 'categoria' ) categoria: string,
 		@Query( 'localizacao' ) localizacao: string
 	): Promise<any>
 	{
-		if ( typeof anoAquisicao == 'number' )
-			return await this.moveisProvedores.buscarAnoAquisicao( anoAquisicao );
+		if ( typeof anoAquisicao == 'string' )
+			return await this.moveisProvedores.buscarAnoAquisicao( Number(anoAquisicao) );
 		else if ( typeof categoria == 'string' )
 			return await this.moveisProvedores.buscarCategoria( categoria );
 		else if ( typeof localizacao == 'string' )
-			return await this.moveisProvedores.buscarCategoria( localizacao );
+			return await this.moveisProvedores.buscarLocalizacao( localizacao );
+    else
+      return '{"status":401,"msg":"A query string solicitada NON EXISTE!"}';
 	}
 
 	@Post()
@@ -53,13 +55,14 @@ export class MoveisControladoresController
 		return await this.moveisProvedores.criarRegistro( criarRegistroDto );
 	}
 
-	@Patch()
+	@Patch(':id')
   @UseGuards(AuthGuard)
 	async atualizarRegistroParcialmente(
-    @Body(new Validacao()) editarRegistroDto : EditarRegistroDto
+    @Body(new Validacao()) editarRegistroDto : EditarRegistroDto,
+    @Param('id') id: number
   ): Promise<any>
 	{
-    return await this.moveisProvedores.editarRegistroDinamicamente( editarRegistroDto );
+    return await this.moveisProvedores.editarRegistroDinamicamente( editarRegistroDto, id );
 	}
 
 }

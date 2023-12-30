@@ -57,7 +57,7 @@ export class MoveisProvedores
       throw new InternalServerErrorException(
       {
         status: 500,
-        msg: '',
+        msg: 'buscarAnoAquisicao() falhou',
         det: err
       });
     }
@@ -77,7 +77,7 @@ export class MoveisProvedores
       throw new InternalServerErrorException(
       {
         status: 500,
-        msg: '',
+        msg: 'buscarCategoria() falhou',
         det: err
       });
     }
@@ -97,7 +97,7 @@ export class MoveisProvedores
       throw new InternalServerErrorException(
       {
         status: 500,
-        msg: '',
+        msg: 'buscarLocalizacao() falhou',
         det: err
       });
     }
@@ -134,14 +134,14 @@ export class MoveisProvedores
 	/** Utiliza dto parcial para atualização parcial do registro (datamask).
 	 *  @param {EditarRegistroDto} registroParcial - objeto com campos editatum.
 	* */
-	async editarRegistroDinamicamente( registroParcial: EditarRegistroDto )
+	async editarRegistroDinamicamente( registroParcial: EditarRegistroDto, idAlvo: number )
   : Promise<any>
 	{
     try
     {
       return {
         status: 200,
-        result: await this.movelRepo.update( 'id', registroParcial )
+        result: await this.movelRepo.update( idAlvo, registroParcial )
       }
     }
     catch(err)

@@ -21,7 +21,7 @@ export class AuthGuard implements CanActivate
       throw new UnauthorizedException(
 				{
 					statusCode: 401,
-					msg: 'sem token. não autorizado'
+					msg: 'requisição sem token. NEGADO'
 				}
 			);
     }
@@ -36,7 +36,7 @@ export class AuthGuard implements CanActivate
 	      throw new UnauthorizedException(
 				{
 					statusCode: 401,
-					msg: 'informações do usuário não válida. não autorizado'
+					msg: `O token "${token}" não é válido. NEGADO`
 				});
 		}
 

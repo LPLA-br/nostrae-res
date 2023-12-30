@@ -17,7 +17,7 @@ import { jwtConstantes } from 'src/constants';
     {
       global: true,
       secret: jwtConstantes.secret,
-      signOptions: { expiresIn: '60s' }
+      signOptions: { expiresIn: '1800s' }
     })
   ],
   controllers: [AuthController],

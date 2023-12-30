@@ -15,8 +15,9 @@ export class Usuario
   @Column()
   sal: string;
 
-  @Column({nullable: true})
-  token: string;
+  //Hashs problemáticos. plaintext.
+  @Column()
+  senha: string;
 
 }
 

@@ -8,10 +8,6 @@ export class CreateUserDto
 
   @IsNotEmpty({message:'hash da senha não presente'})
   @IsString({message:'hash da senha deve ser string'})
-  hashsenha: string;
-
-  @IsNotEmpty({message:'sal não presente'})
-  @IsString({message:'sal deve ser string'})
-  sal: string;
+  senha: string;
 }
 

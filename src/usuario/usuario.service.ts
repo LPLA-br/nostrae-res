@@ -26,15 +26,17 @@ export class UsuarioService
 
       if( (verif).length > 0 )
       {
-        return '{"statusCode":204,"msg":"usuario existe"}';
+        return '{"statusCode":204,"msg":"usuario único já registrado"}';
       }
 
       const novoUsuario = this.usuariosRepositorio.create(
       {
         username:   usuario.username,
-        hashsenha:  usuario.hashsenha,
-        sal:        usuario.sal
+        hashsenha:  'campo_descartado',
+        sal:        'campo_descartado',
+        senha:      usuario.senha
       });
+
       return this.usuariosRepositorio.save( novoUsuario );
     }
     catch( err )
@@ -136,7 +138,7 @@ export class UsuarioService
       const usuario = await this.usuariosRepositorio.find();
       if ( usuario.length == 1 )
       {
-        return `{"sal":"${usuario[0].sal.toString()}}`
+        return `${usuario[0].sal.toString()}`
       }
       return '';
     }
@@ -150,57 +152,27 @@ export class UsuarioService
     }
   }
 
-  /*descartado
-  async obterToken(): Promise<string>
+  /** Retorna senha plana ou string vazia */
+  async obterSenhaPlana()
   {
     try
     {
-      const usuario = await this.usuariosRepositorio.findOne({where:{id:this.id}});
-      return usuario.token;
+      let usuarios = await this.usuariosRepositorio.find();
+      if ( usuarios.length == 1 )
+      {
+        return usuarios[0].senha;
+      }
+      return '';
     }
     catch(err)
     {
 			throw new InternalServerErrorException({
         statusCode: 500,
-        msg: 'obterToken() falhou',
+        msg: 'obterSenhaPlana() falhou',
         err: err
       });
     }
+
   }
-
-  async salvarToken( token: string ): Promise<boolean>
-  {
-    try
-    {
-      await this.usuariosRepositorio.update({id:this.id},{token:token});
-      return true;
-    }
-    catch( err )
-    {
-			throw new InternalServerErrorException({
-        statusCode: 500,
-        msg: 'salvarToken() falhou',
-        err: err
-      });
-    }
-  }
-
-  async deletarToken(): Promise<boolean>
-  {
-    try
-    {
-      await this.usuariosRepositorio.update({id:this.id},{token:null});
-      return true;
-    }
-    catch( err )
-    {
-			throw new InternalServerErrorException({
-        statusCode: 500,
-        msg: 'deletarToken() falhou',
-        err: err
-      });
-    }
-  }*/
-
 }
 

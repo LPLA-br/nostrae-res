@@ -7,9 +7,6 @@ import { UsuarioService } from './usuario.service';
 import { CreateUserDto } from './dto/criarUsuario.dto';
 import { Usuario } from './entities/usuario.entidade';
 
-import { UseGuards } from '@nestjs/common';
-import { AuthGuard } from 'src/auth/auth.guard';
-
 @Controller('usuario')
 export class UsuarioController
 {
@@ -29,19 +26,6 @@ export class UsuarioController
   ): Promise<Usuario|string>
   {
     return await this.servicoUsuario.salvarUsuarioUnico( createUserDto );
-  }
-
-  @Get()
-  async enviarSal(): Promise<string>
-  {
-    return await this.servicoUsuario.obterSal();
-  }
-
-  /* Método não público */
-  @Get('existe')
-  async listaUsuarios(): Promise<boolean>
-  {
-    return this.servicoUsuario.usuarioExiste();
   }
 
 }

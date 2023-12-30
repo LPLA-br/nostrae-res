@@ -14,20 +14,18 @@ export class AuthServiceUsuario
   {}
 
   /** Acesso ao sistema monousuário.
-   *  @param {string} hashsenha - hash da senha gerado no cliente para comparação.
+   *  @param {string} senha - hash da senha gerado no cliente para comparação.
    *  @returns {{acess_token:string}} token para o cliente assinar suas ações nas rotas de funcionalidade. 
   * */
-  async validarParaSessao( hashsenha: string ): Promise<{status:number,acess_token:string}>
+  async validarParaSessao( senha: string ): Promise<{status:number,acess_token:string}>
   {
 		try
 		{
 			if ( await this.servicoUsuarios.usuarioExiste() )
 			{
-				const hash = await this.servicoUsuarios.obterHash();
+        const senhaArmazenada = await this.servicoUsuarios.obterSenhaPlana();
 
-        if ( hash.length == 0 ) throw new Error('{"status":500,"msg":"hash vazio"}');
-
-				if ( hash === hashsenha )
+				if ( senha == senhaArmazenada )
 				{
           const payload = this.jwtService.sign(
           {
@@ -44,7 +42,7 @@ export class AuthServiceUsuario
 					throw new UnauthorizedException(
 					{
 						statusCode: 401,
-						msg: 'senha em hash ou login informados não estão corretos'
+						msg: 'hash da senha informada não bate com o do banco de dados'
 					});
 				}
 			}
@@ -59,42 +57,4 @@ export class AuthServiceUsuario
 			});
 		}
   }
-
-  /* Recebe token do cliente e retorna permissão para ação.
-	 *  DESCARTADO DEVIDO CONHECIMENTO DO FUNCIONAMENTO DO JWT
-   *  @param {string} token do usuário único.
-   *  @returns {boolean} permissão
-	 *
-  async autorizacao( token:string ): Promise<boolean>
-  {
-    try
-    {
-      const userToken = await this.servicoUsuarios.obterToken();
-      if ( userToken == token )
-      {
-        return true;
-      }
-      return false;
-    }
-    catch( err )
-    {
-      throw new UnauthorizedException( err );
-    }
-  }*/
-
-	/* DESCARTADO DEVIDO A CONHECIMENTO DO FUNCIONAMENTO DO JWT
-  async encerrarSessao(): Promise<any>
-  {
-    try
-    {
-      await this.servicoUsuarios.deletarToken();
-			return '{statusCode:200}';
-    }
-    catch(err)
-    {
-      throw new Error( err );
-    }
-  }
-	*/
-
 }
