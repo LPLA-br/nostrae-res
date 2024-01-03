@@ -5,6 +5,7 @@ import { UsuarioModule } from './usuario/usuario.module';
 import { Movel } from './moveis/entidades/movel.entidade';
 import { Usuario } from './usuario/entities/usuario.entidade';
 import { AuthModule } from './auth/auth.module';
+import { join } from 'path';
 require('dotenv/config');
 
 @Module(
@@ -23,8 +24,9 @@ require('dotenv/config');
             Movel,
             Usuario
           ],
-          /*não utilizar em produção abaixo*/
-          synchronize: true,
+          //synchronize: true,
+          migrationsRun: true,
+          migrations: [ join(__dirname, 'migrations', '*') ], //todas
         }
       ),
       UsuarioModule,

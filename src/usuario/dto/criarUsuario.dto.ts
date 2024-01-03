@@ -2,12 +2,12 @@ import { IsString, IsNotEmpty } from 'class-validator';
 
 export class CreateUserDto
 {
-  @IsNotEmpty({message:'username deve ser incluido'})
+  @IsNotEmpty({message:'username não presente'})
   @IsString({message:'username deve ser string'})
   username: string;
 
-  @IsNotEmpty({message:'hash da senha não presente'})
-  @IsString({message:'hash da senha deve ser string'})
+  @IsNotEmpty({message:'senha não presente'})
+  @IsString({message:'senha deve ser string'})
   senha: string;
 }
 
